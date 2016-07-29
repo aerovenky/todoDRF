@@ -1,5 +1,6 @@
 coreapi==1.32.0
 Django==1.8.4
+django-cors-headers==1.1.0
 django-rest-swagger==0.3.4
 djangorestframework==3.4.0
 itypes==1.1.0
