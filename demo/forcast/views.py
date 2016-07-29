@@ -20,8 +20,6 @@ def getForecast(request):
     if lat and lng:
         url = 'http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid=dae7e4d983aad96854c5ca63bc341e0d'
         res = requests.get(url)
-        print res.json()
-        print res.status_code
         return Response(res.json())
         if res.status_code == '200':
             return Response(res.json())

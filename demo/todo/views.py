@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthentic
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.response import Response
 from rest_framework import generics
-
+import simplejson as json
 from .models import Label, Note
 from .serializers import NoteSerializer, LabelSerializer
 # Create your views here.
@@ -22,7 +22,8 @@ def getLabels(request):
         mylables = Label.objects.filter(user=request.user).values('id','name')
         return Response(mylables)
     else:
-        name = request.POST.get('name')
+        reqjson = json.loads(request.body)
+        name = reqjson.get('name')
         if name:
             this_label = Label.objects.create(user=request.user,name=name)
             return Response({'id':this_label.id, 'name':this_label.name},status=201)
@@ -45,7 +46,8 @@ def LabelDetail(request,pk):
         if request.method == 'GET':
             return Response({'id':label.id, 'name':label.name})
         elif request.method == 'POST':
-            name = request.POST.get('name')
+            reqjson = json.loads(request.body)
+            name = reqjson.get('name')
             if name:
                 label.name = name
                 label.save()
@@ -76,8 +78,9 @@ def getNotes(request):
         serializer = NoteSerializer(myNotes, many=True)
         return Response(serializer.data)
     else:
-        name = request.POST.get('name')
-        body = request.POST.get('body')
+        reqjson = json.loads(request.body)
+        name = reqjson.get('name')
+        body = reqjson.get('body')
         if name and body:
             this_note = Note.objects.create(name=name,body=body,user=request.user)
             return Response(NoteSerializer(this_note).data, status=201)
@@ -104,8 +107,9 @@ def NoteDetail(request,pk):
         if request.method == 'GET':
             return Response(NoteSerializer(note).data)
         elif request.method == 'POST':
-            name = request.POST.get('name')
-            body = request.POST.get('body')
+            reqjson = json.loads(request.body)
+            name = reqjson.get('name')
+            body = reqjson.get('body')
             if name and body:
                 note.name = name
                 note.body = body
@@ -131,8 +135,9 @@ def NoteLabel(request,pk):
     '''
     note = Note.objects.filter(id=pk).filter(user=request.user).first()
     if note:
-        add = request.POST.get('add')
-        remove = request.POST.get('remove')
+        reqjson = json.loads(request.body)
+        add = reqjson.get('add')
+        remove = reqjson.get('remove')
         if add or remove:
             if add:
                 print add
