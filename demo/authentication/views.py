@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
-
+import simplejson as json
 # Create your views here.
 @api_view(['POST'])
 def getAuthToken(request):
@@ -17,8 +17,9 @@ def getAuthToken(request):
     password : <password>
     '''
     #username = request.body.get('username')
-    username = request.POST.get('username')
-    password = request.POST.get('password')
+    reqjson = json.loads(request.body)
+    username = reqjson.get('username')
+    password = reqjson.get('password')
     if username and password:
 
         user = authenticate(username=username, password=password)
