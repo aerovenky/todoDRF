@@ -16,8 +16,8 @@ def getForecast(request):
     longitude : <lable name>
     '''
     reqjson = json.loads(request.body)
-    lat = req.get('latitude')
-    lng = req.get('longitude')
+    lat = reqjson.get('latitude')
+    lng = reqjson.get('longitude')
     if lat and lng:
         url = 'http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid=dae7e4d983aad96854c5ca63bc341e0d'
         res = requests.get(url)
